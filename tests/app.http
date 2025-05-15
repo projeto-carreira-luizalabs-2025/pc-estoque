@@ -1,0 +1,52 @@
+### Variaveis de Ambiente
+
+@hostname=localhost
+@port=8000
+
+@BASE_URL={{hostname}}:{{port}}
+
+
+### Listar todos os itens do estoque
+
+GET http://{{BASE_URL}}/estoque HTTP/1.1
+Accept: application/json
+
+### Adicionar novo item no estoque 
+POST http://{{BASE_URL}}/estoque HTTP/1.1
+Content-Type : application/json
+Accept: application/json
+
+{
+    "seller_id": "4",
+    "sku": "Tv Smart LG",
+    "quantidade": 10
+}
+
+### Buscar item pelo seller_id e sku 
+GET http://{{BASE_URL}}/estoque/1/Mouse%20Gamer HTTP/1.1
+Accept: application/json
+
+
+### Buscar itens no estoque pelo seller_id com paginação
+GET  http://{{BASE_URL}}/estoque/buscar/?seller_id=1&page=1&page_size=10
+Accept: application/json
+
+### Buscar itens no estoque pelo sku com paginação
+GET http://{{BASE_URL}}/estoque/buscar/?sku=Mouse%20Gamer&page=1&page_size=10
+Accept: application/json
+
+
+### Atualizar um item no estoque
+PUT  http://{{BASE_URL}}/estoque/1/Mouse%20Gamer HTTP/1.1
+Content-Type : application/json
+Accept: application/json
+
+{
+    "seller_id": "1",
+    "sku": "Mouse Gamer",
+    "quantidade": 25
+}
+
+### Deletar um item do estoque
+DELETE http://{{BASE_URL}}/estoque/1/Mouse%20Gamer HTTP/1.1
+Accept: application/json

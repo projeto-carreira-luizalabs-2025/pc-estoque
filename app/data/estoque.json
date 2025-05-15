@@ -1,0 +1,17 @@
+[
+    {
+        "seller_id": "1",
+        "sku": "Mouse Gamer",
+        "quantidade": 15
+    },
+    {
+        "seller_id": "2",
+        "sku": "Teclado Mec\u00e2nico",
+        "quantidade": 10
+    },
+    {
+        "seller_id": "3",
+        "sku": "Monitor 24''",
+        "quantidade": 5
+    }
+]
