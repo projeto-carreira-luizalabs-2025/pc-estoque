@@ -5,6 +5,7 @@ O PC-Estoque é um sistema de gerenciamento de estoque desenvolvido para oferece
 
 
 ## 👥 Equipe de Desenvolvimento
+
 - Elbia Simone Buglio
 
 - Fabio Romero
@@ -15,6 +16,7 @@ O PC-Estoque é um sistema de gerenciamento de estoque desenvolvido para oferece
 
 
 ## ⚙️ Configuração do Ambiente Local
+
 - Python 3.12
 - FastAPI
 - Uvicorn
@@ -22,11 +24,13 @@ O PC-Estoque é um sistema de gerenciamento de estoque desenvolvido para oferece
 - Outras dependências listadas em requirements
 
 ## 📦 Clonando o Repositório
+
 git clone https://github.com/projeto-carreira-luizalabs-2025/pc-estoque/tree/v1
 
 cd pc-estoque
 
 ## 📑 Configuração no Linux 🐧
+
 Crie o ambiente virtual:
 make build-venv
 
@@ -39,7 +43,9 @@ make requirements-dev
 ⚠️ A partir deste ponto, todos os comandos deverão ser executados dentro do ambiente virtual ativado.
 
 ## 📑 Configuração no Windows 🪟
-**📌 1️⃣ Instalar o make via MSYS2 (se ainda não instalado)**
+
+### **📌 1️⃣ Instalar o make via MSYS2 (se ainda não instalado)**
+
 - Baixe o instalador do MSYS2:
   
 👉 https://www.msys2.org/
@@ -49,7 +55,7 @@ pacman -Syu
 pacman -S make
 - Depois de instalado, você poderá usar o make no terminal MSYS2 ou adicionar o caminho do make.exe no PATH para uso em outros terminais.
 
-**📌 2️⃣ Criar o ambiente virtual:**
+### **📌 2️⃣ Criar o ambiente virtual:**
 
 python -m venv venv
 
@@ -73,6 +79,7 @@ python --version
 ⚠️ Certifique-se de ativar o ambiente virtual antes de executar qualquer comando relacionado ao projeto.
 
 ## ▶️ Execução
+
 **1️⃣ Configurar as variáveis de ambiente**
 
 Copie o arquivo de variáveis de desenvolvimento:
@@ -90,11 +97,12 @@ make run-dev
 
 ou, se preferir executar manualmente:
 
-uvicorn app01:app --reload
+uvicorn app.api_main:app --reload
 
 ## 📖 Acesse a documentação interativa da API:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+
+- Swagger UI: http://localhost:8000/api/docs
+- ReDoc: http://localhost:8000/api/redoc
 
 ## 📬 Contribuições e Atualizações  
 

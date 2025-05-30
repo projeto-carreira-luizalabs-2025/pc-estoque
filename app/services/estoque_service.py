@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from app.api.common.schemas.pagination import Paginator
-from app.api.v1.schemas.estoque_schema import EstoqueUpdate 
 from ..models.estoque_model import Estoque
 from ..repositories.estoque_repository import EstoqueRepository
 from .base import CrudService
@@ -25,7 +24,8 @@ class EstoqueServices(CrudService[Estoque, UUID]):
         return await self.repository.create(estoque)
 
     async def update(self, seller_id: str, sku: str, estoque_update) -> Estoque:
-        
+        from app.api.v1.schemas.estoque_schema import EstoqueUpdate 
+
 
         """
         Atualiza um estoque existente.
