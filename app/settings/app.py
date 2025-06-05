@@ -4,7 +4,7 @@ from .base import BaseSettings
 
 
 class AppSettings(BaseSettings):
-    version: str = "0.0.2"
+    version: str = Field(default="0.2.1", title="Versão da aplicação")
 
     app_name: str = Field(default="PC Estoque", title="Nome da aplicação")
 

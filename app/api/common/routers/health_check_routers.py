@@ -7,7 +7,7 @@ from starlette import status
 from app.container import Container
 
 if TYPE_CHECKING:
-    from app.services.health_check import HealthCheckService
+    from app.settings import AppSettings
 
 
 def add_health_check_router(app: FastAPI, prefix: str = "/api") -> None:
@@ -42,9 +42,9 @@ def add_health_check_router(app: FastAPI, prefix: str = "/api") -> None:
     )
     @inject
     async def health_check(
-        service: "HealthCheckService" = Depends(Provide[Container.health_check_service]),
+        settings: "AppSettings" = Depends(Provide[Container.settings]),
     ):
         # XXX Fixado.
-        return {"version": "0.0.2"}
+        return {"version": settings.version}
 
     app.include_router(health_router)

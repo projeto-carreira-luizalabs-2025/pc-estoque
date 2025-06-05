@@ -17,10 +17,14 @@ router = APIRouter(prefix="/estoque", tags=["Estoque V2"])
 @inject
 async def list_estoque_v2(
     x_seller_id: str = Header(..., alias="x-seller-id"),
+    quantity: int = None,
     paginator: Paginator = Depends(get_request_pagination),
     estoque_service: EstoqueServices = Depends(Provide[Container.estoque_service]),
 ):
-    result = await estoque_service.list(paginator=paginator, filters={"seller_id": x_seller_id})
+    filters = {"seller_id": x_seller_id}
+    if quantity is not None:
+        filters["quantidade"] = quantity
+    result = await estoque_service.list(paginator=paginator, filters=filters)
     return paginator.paginate(results=result)
 
 @router.get(
