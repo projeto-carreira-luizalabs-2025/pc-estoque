@@ -1,0 +1,108 @@
+##
+# Chamadas testes com nossa API
+
+###
+# URL
+@url=http://localhost:8000
+
+## ---------------------------
+# HEALTH
+
+@api_health={{url}}/api/health
+
+###
+# Ping versão
+GET {{api_health}}
+
+###
+# Meu seller de testes
+@seller_id=luizalabs
+
+###
+#
+# Usuário e senha do seller
+@username=seller01
+@password=senha123
+
+@sku=sample-sku
+
+###
+# Conectando no Keycloak
+@url_keycloak=http://localhost:8080/realms/marketplace
+
+###
+# Obtendo o token do usuário `vendedor1`
+# @name usertoken
+POST {{url_keycloak}}/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=pc-estoque&grant_type=password&username=vendedor1&password=senha123&scope=openid
+
+
+### -----------------------
+# Estoque
+
+@api_estoque={{url}}/seller/v2/estoque
+
+###
+# Consultando sem enviar token (deve retornar 401)
+GET {{api_estoque}}/{{sku}}
+
+###
+# Consultando enviando token inválido (deve retornar 401)
+GET {{api_estoque}}/{{sku}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer token-invalido
+
+###
+# Consultando com token válido
+GET {{api_estoque}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}
+
+###
+# Consultando estoque por SKU (GET /estoque/{sku})
+GET {{api_estoque}}/{{sku}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}
+
+###
+# Consultando com seller-id inválido (deve retornar 403 ou 404)
+GET {{api_estoque}}/{{sku}}
+x-seller-id: seller-nao-cadastrado
+Authorization: Bearer {{usertoken.response.body.access_token}}
+
+###
+# Listando estoques (GET /estoque)
+GET {{api_estoque}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}
+
+###
+# Cadastrando novo estoque (POST /estoque)
+POST {{api_estoque}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}
+Content-Type: application/json
+
+{
+    "sku": "sample-sku",
+    "quantidade": 100
+}
+
+###
+# Atualizando quantidade (PATCH /estoque/{sku})
+PATCH {{api_estoque}}/{{sku}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}
+Content-Type: application/json
+
+{
+    "quantidade": 10
+}
+
+###
+# Removendo estoque (DELETE /estoque/{sku})
+DELETE {{api_estoque}}/{{sku}}
+x-seller-id: {{seller_id}}
+Authorization: Bearer {{usertoken.response.body.access_token}}

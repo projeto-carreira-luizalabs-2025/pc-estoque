@@ -1,5 +1,5 @@
 # Etapa de build: cria o ambiente virtual e instala dependências
-FROM python:3.12-slim as build
+FROM python:3.12-slim AS build
 
 WORKDIR /app
 

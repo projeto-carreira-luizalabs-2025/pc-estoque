@@ -12,7 +12,6 @@ Base = declarative_base()
 class SQLAlchemyClient:
     def __init__(self, app_db_url: PostgresDsn):
         self.app_db_url = app_db_url
-        print(f"Connecting to database at {app_db_url}")
         self.engine = create_async_engine(str(app_db_url))
         self.session_maker = sessionmaker(self.engine, expire_on_commit=False, class_=AsyncSession)
 

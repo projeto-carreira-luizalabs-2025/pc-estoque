@@ -1,4 +1,4 @@
-from pydantic import Field, PostgresDsn
+from pydantic import Field, PostgresDsn, HttpUrl
 import dotenv
 import os
 
@@ -19,6 +19,7 @@ class AppSettings(BaseSettings):
 
     app_db_url: PostgresDsn = Field(..., title="URI para o banco Postgresql")
 
+    app_openid_wellknown: HttpUrl = Field(..., title="URL well-known do Keycloak")
 
 settings = AppSettings()
 

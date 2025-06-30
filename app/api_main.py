@@ -1,7 +1,7 @@
 import os
 
 import dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from app.container import Container
 from app.settings import api_settings
@@ -21,6 +21,13 @@ def init() -> FastAPI:
     container.config.from_pydantic(api_settings)
 
     app_api = create_app(api_settings, api_routes)
+
+    @app_api.middleware("http")
+    async def log_auth_header(request: Request, call_next):
+        auth_header = request.headers.get("authorization")
+        response = await call_next(request)
+        return response
+
     app_api.container = container  # type: ignore[attr-defined]
 
     # Autowiring

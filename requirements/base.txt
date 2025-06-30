@@ -8,3 +8,8 @@ SQLAlchemy
 psycopg2-binary==2.9.10
 asyncpg==0.30.0
 alembic==1.16.1
+pyjwt[crypto]==2.10.1
+cryptography==45.0.4
+pytest 
+pytest-asyncio
+pytest-cov

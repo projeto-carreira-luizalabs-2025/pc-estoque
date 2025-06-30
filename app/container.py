@@ -1,11 +1,12 @@
 from dependency_injector import containers, providers
 
 from app.repositories import EstoqueRepository
-from app.services import HealthCheckService
-from app.services import EstoqueServices
+from app.services import HealthCheckService, EstoqueServices
 from app.settings import AppSettings
 
 from app.integrations.database.sqlalchemy_client import SQLAlchemyClient
+
+from app.integrations.auth.keycloak_adapter import KeycloakAdapter
 
 
 class Container(containers.DeclarativeContainer):
@@ -15,7 +16,9 @@ class Container(containers.DeclarativeContainer):
 
     # Integrações
     sql_client = providers.Singleton(SQLAlchemyClient, config.app_db_url)
-    print("SQLAlchemyClient initialized with app_db_url:", config.app_db_url)
+
+    # Keycloak Adapter
+    keycloak_adapter = providers.Singleton(KeycloakAdapter, config.app_openid_wellknown)
 
     # Repositórios
     estoque_repository = providers.Singleton(EstoqueRepository, sql_client=sql_client)

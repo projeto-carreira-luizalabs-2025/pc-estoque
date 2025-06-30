@@ -127,4 +127,72 @@ async def test_find_raises_type_error_with_invalid_filters(repository):
         await repository.find(1234)
 
 
+@pytest.mark.asyncio
+async def test_delete_by_seller_id_and_sku(repository, mock_sqlalchemy_client, mock_session):
+    """Deve deletar um registro e retornar True se deletou."""
+    # Simula rowcount > 0 (deletou)
+    mock_result = MagicMock()
+    mock_result.rowcount = 1
+    mock_session.execute.return_value = mock_result
+    mock_sqlalchemy_client.init_delete_estoque.return_value = MagicMock(where=MagicMock(return_value=MagicMock(where=MagicMock(return_value=MagicMock()))))
+    result = await repository.delete_by_seller_id_and_sku("vendedor123", "sku123")
+    assert result is True
 
+@pytest.mark.asyncio
+async def test_delete_by_seller_id_and_sku_not_found(repository, mock_sqlalchemy_client, mock_session):
+    """Deve retornar False se não deletou nada."""
+    mock_result = MagicMock()
+    mock_result.rowcount = 0
+    mock_session.execute.return_value = mock_result
+    mock_sqlalchemy_client.init_delete_estoque.return_value = MagicMock(where=MagicMock(return_value=MagicMock(where=MagicMock(return_value=MagicMock()))))
+    result = await repository.delete_by_seller_id_and_sku("vendedor123", "sku123")
+    assert result is False
+
+@pytest.mark.asyncio
+async def test_update_by_seller_id_and_sku_success(repository, mock_sqlalchemy_client, mock_session, estoque_model, estoque_base):
+    """Deve atualizar e retornar o modelo atualizado."""
+    repository._find_base_by_seller_id_sku_on_session = AsyncMock(return_value=estoque_base)
+    repository.to_model = MagicMock(return_value=estoque_model)
+    mock_sqlalchemy_client.get_pk_fields.return_value = ["id"]
+    mock_sqlalchemy_client.to_dict.return_value = estoque_model.model_dump()
+    result = await repository.update_by_seller_id_and_sku("vendedor123", "sku123", estoque_model)
+    assert result == estoque_model
+
+@pytest.mark.asyncio
+async def test_update_by_seller_id_and_sku_not_found(repository, mock_sqlalchemy_client, mock_session, estoque_model):
+    """Deve retornar None se não encontrar para atualizar."""
+    repository._find_base_by_seller_id_sku_on_session = AsyncMock(return_value=None)
+    repository.to_model = MagicMock(return_value=None)
+    result = await repository.update_by_seller_id_and_sku("vendedor123", "sku123", estoque_model)
+    assert result is None
+
+@pytest.mark.asyncio
+async def test_patch_by_seller_id_and_sku_success(repository, mock_sqlalchemy_client, mock_session, estoque_base, estoque_model):
+    """Deve atualizar parcialmente e retornar o modelo atualizado."""
+    repository._find_base_by_seller_id_sku_on_session = AsyncMock(return_value=estoque_base)
+    repository.to_model = MagicMock(return_value=estoque_model)
+    patch_entity = MagicMock()
+    patch_entity.model_dump.return_value = {"quantidade": 99}
+    result = await repository.patch_by_seller_id_and_sku("vendedor123", "sku123", patch_entity)
+    assert result == estoque_model
+
+@pytest.mark.asyncio
+async def test_patch_by_seller_id_and_sku_not_found(repository, mock_sqlalchemy_client, mock_session):
+    """Deve retornar None se não encontrar para patch."""
+    repository._find_base_by_seller_id_sku_on_session = AsyncMock(return_value=None)
+    patch_entity = MagicMock()
+    patch_entity.model_dump.return_value = {"quantidade": 99}
+    result = await repository.patch_by_seller_id_and_sku("vendedor123", "sku123", patch_entity)
+    assert result is None
+
+@pytest.mark.asyncio
+async def test_find_with_valid_filters(repository, mock_sqlalchemy_client, mock_session, estoque_base, estoque_model):
+    """Deve buscar lista de entidades com filtros válidos."""
+    mock_sqlalchemy_client.init_select_estoque.return_value = MagicMock(where=MagicMock(return_value=MagicMock()))
+    mock_result = MagicMock()
+    mock_result.scalars.return_value.all.return_value = [estoque_base]
+    mock_session.execute.return_value = mock_result
+    repository.to_model = MagicMock(return_value=estoque_model)
+    filters = {"sku": "sku123"}
+    result = await repository.find(filters)
+    assert result == [estoque_model]

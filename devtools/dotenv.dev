@@ -2,3 +2,6 @@ ENV=dev
 
 # Esta variável é utilizada pelo alembic
 APP_DB_URL=postgresql://admin:admin@db:5432/estoque_db
+
+# Esta variável é utilizada pelo Keycloak
+APP_OPENID_WELLKNOWN=http://host.docker.internal:8080/realms/marketplace/.well-known/openid-configuration
